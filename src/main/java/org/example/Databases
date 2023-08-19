@@ -1,0 +1,97 @@
+create table if not exists public.user_account
+(
+    id                      serial
+        primary key,
+    birth_day               date,
+    ciy                     varchar(255),
+    father_name             varchar(255),
+    garde                   varchar(255),
+    id_number               varchar(255),
+    last_name               varchar(255),
+    mother_name             varchar(255),
+    name                    varchar(255),
+    national_code           varchar(255),
+    password                varchar(255),
+    spouse_name             varchar(255),
+    student_id              bigint,
+    university_name         varchar(255),
+    university_type         integer,
+    yearsofjointouniversity date,
+    dorm                    varchar(255)
+);
+
+alter table public.user_account
+    owner to postgres;
+
+create table if not exists public.card_info
+(
+    id          serial
+        primary key,
+    card_number bigint,
+    cvv         integer,
+    ex          date,
+    user_id     integer
+);
+
+alter table public.card_info
+    owner to postgres;
+
+create table if not exists public.studentloanpayment
+(
+    id             bigserial
+        primary key,
+    payment_amount double precision
+);
+
+alter table public.studentloanpayment
+    owner to postgres;
+
+create table if not exists public.studentloaninstallment
+(
+    id                 bigserial
+        primary key,
+    installment_number integer,
+    interest_payment   double precision,
+    payment_date       date,
+    payment_status     date,
+    principal_payment  double precision,
+    total_payment      double precision,
+    user_id            integer,
+    payment_id         bigint
+        constraint fkcue1vetmw20s5y98wmj8lp4c1
+            references public.studentloanpayment
+);
+
+alter table public.studentloaninstallment
+    owner to postgres;
+
+create table if not exists public.student_loan
+(
+    id                              serial
+        primary key,
+    address                         varchar(255),
+    housing_rental_agreement_number bigint,
+    loan_type                       varchar(255),
+    nationalcode                    varchar(255),
+    payment                         integer,
+    user_id                         integer
+);
+
+alter table public.student_loan
+    owner to postgres;
+
+create table if not exists public.user_account_student_loan
+(
+    useraccount_id  integer not null
+        constraint fk34e01x8mqnxicqqfd2u04a6by
+            references public.user_account,
+    studentloans_id integer not null
+        constraint uk_3guuvjj3ufy7l2l7g2s6idlbl
+            unique
+        constraint fkeqhd7qhgd7v6hc8x53aqkkms6
+            references public.student_loan
+);
+
+alter table public.user_account_student_loan
+    owner to postgres;
+
